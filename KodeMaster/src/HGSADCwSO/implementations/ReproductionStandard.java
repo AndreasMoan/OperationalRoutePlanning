@@ -62,6 +62,9 @@ public class ReproductionStandard implements ReproductionProtocol {
         HashMap<Integer, ArrayList<Integer>> father = parents.get(0).getVesselTourChromosome();
         HashMap<Integer, ArrayList<Integer>> mother = parents.get(1).getVesselTourChromosome();
 
+        System.out.println(father);
+        System.out.println(mother);
+
         HashMap<Integer, ArrayList<Integer>> kid = new HashMap<Integer, ArrayList<Integer>>();
 
         // STEP 1: inherit from father
@@ -78,6 +81,8 @@ public class ReproductionStandard implements ReproductionProtocol {
 
             ArrayList<Integer> ordersToCopy = new ArrayList<>();
             ArrayList<Integer> fatherOrders = father.get(vesselNumber);
+
+            System.out.println(fatherOrders);
 
             if (fatherOrders.size() > 0) {
 

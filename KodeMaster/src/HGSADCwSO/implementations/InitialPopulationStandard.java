@@ -20,7 +20,13 @@ public class InitialPopulationStandard implements InitialPopulationProtocol {
 
     public Individual createIndividual(){
         HashMap<Integer, Set<Integer>> vesselOrderChromsome = createVesselOrderChromosome();
+
+        System.out.println("VesselOrderChromosome " + vesselOrderChromsome);
+
         HashMap<Integer, ArrayList<Integer>> vesselTourChromosome = createVesselTourChromosome(vesselOrderChromsome);
+
+        System.out.println("VesselTourChromosome " + vesselTourChromosome);
+
         Individual kid = new Individual(vesselTourChromosome);
         return kid;
     }
@@ -34,9 +40,12 @@ public class InitialPopulationStandard implements InitialPopulationProtocol {
 
         HashMap<Integer, Set<Integer>> vesselOrderChromosome = new HashMap<Integer, Set<Integer>>();
         HashMap<Integer, Order> orders = problemData.getOrdersByNumber();
+        for (int vessel = 0; vessel < problemData.getNumberOfVessels(); vessel++){
+            vesselOrderChromosome.put(vessel, new HashSet<>());
+        }
 
         int n = 0;
-        while (orders.get(n).getDay() == 0) {
+        while (n < problemData.getNumberOfOrders() && orders.get(n).getDay() == 0) {
             int randomVessel = new Random().nextInt(problemData.getNumberOfVessels());
             vesselOrderChromosome.get(randomVessel).add(n);
             n++;
@@ -49,13 +58,25 @@ public class InitialPopulationStandard implements InitialPopulationProtocol {
         HashMap<Integer, ArrayList<Integer>> vesselTourChromosome = new HashMap<Integer, ArrayList<Integer>>();
 
         for (int i = 0; i < problemData.getNumberOfVessels(); i++) {
+
+            System.out.println("---------");
+
+            vesselTourChromosome.put(i, new ArrayList<Integer>());
             for (int j : vesselOrderChromosome.get(i)) {
+
+                System.out.println("====");
+
+                System.out.println(i + " " + j);
                 vesselTourChromosome.get(i).add(j);
             }
-            Collections.shuffle(vesselTourChromosome.get(i));
+            if (vesselOrderChromosome.get(i).size() > 0) {
+                Collections.shuffle(vesselTourChromosome.get(i));
+            }
         }
+        System.out.println(vesselTourChromosome);
         return vesselTourChromosome;
     }
+
 
 
 }

@@ -117,6 +117,10 @@ public class ProblemData {
         return Utilities.parseDouble(problemInstanceParameters.get(parameterName));
     }
 
+    public int getNumberOfOrders() {
+        return orders.size();
+    }
+
     public ArrayList<Installation> getCustomerInstallations() {
         return customerInstallations;
     }

@@ -1,8 +1,15 @@
 package HGSADCwSO;
 
-import HGSADCwSO.implementations.*;
-import HGSADCwSO.protocols.*;
-import org.jetbrains.annotations.NotNull;
+import HGSADCwSO.implementations.EducationStandard;
+import HGSADCwSO.implementations.FitnessEvaluation;
+import HGSADCwSO.implementations.InitialPopulationStandard;
+import HGSADCwSO.implementations.ParentsSelectionBinaryTournament;
+import HGSADCwSO.implementations.ReproductionStandard;
+import HGSADCwSO.protocols.EducationProtocol;
+import HGSADCwSO.protocols.FitnessEvaluationProtocol;
+import HGSADCwSO.protocols.InitialPopulationProtocol;
+import HGSADCwSO.protocols.ParentSelectionProtocol;
+import HGSADCwSO.protocols.ReproductionProtocol;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +48,7 @@ public class Process {
         return kid;
     }
 
-    public void repair(@NotNull Individual individual, double probability) {
+    public void repair(Individual individual, double probability) {
         if (!individual.isFeasible()) {
             double randomDouble = new Random().nextDouble();
             if (randomDouble < probability) {
