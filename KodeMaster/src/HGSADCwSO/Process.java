@@ -72,8 +72,8 @@ public class Process {
     }
 
     private void selectProtocols() {
-        selectInitialPopulationProtocol();
         selectFitnessEvaluationProtocol();
+        selectInitialPopulationProtocol();
         selectParentSelectionProtocol();
         selectEducationProtocol();
         selectReproductionProtocol();
@@ -82,7 +82,7 @@ public class Process {
     private void selectInitialPopulationProtocol() {
         switch (problemData.getHeuristicParameters().get("Initial population protocol")) {
             case "standard":
-                initialPopulationProtocol = new InitialPopulationStandard(problemData);
+                initialPopulationProtocol = new InitialPopulationStandard(problemData, fitnessEvaluationProtocol);
                 break;
             default:
                 initialPopulationProtocol = null;
@@ -149,6 +149,8 @@ public class Process {
         feasibleSubPopulationByIteration.put(iteration, feasiblePopulation);
         infeasibleSubPopulationByIteration.put(iteration, infeasiblePopulation);
         bestFeasibleIndividualByIteration.put(iteration, bestFeasibleIndividual);
+
+        System.out.println("Iteration: " + iteration + " Feasible pop size: " + feasiblePopulation.size() + " Infeasible pop size: " + infeasiblePopulation.size());
     }
 
     public void addDiversityDistance(Individual kid) {
@@ -156,4 +158,6 @@ public class Process {
 
     public void updateBiasedFitness(ArrayList<Individual> feasiblePopulation, ArrayList<Individual> infeasiblePopulation) {
     }
+
+
 }

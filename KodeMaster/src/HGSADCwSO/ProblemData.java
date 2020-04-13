@@ -41,7 +41,8 @@ public class ProblemData {
     }
 
     public void setCustomerInstallations() {
-        customerInstallations = installations;
+        customerInstallations = new ArrayList<>();
+        customerInstallations.addAll(installations);
         Installation depot = null;
         for (Installation installation : installations) {
             if (installation.getNumber() == 0) {
@@ -97,12 +98,16 @@ public class ProblemData {
         return heuristicParameters;
     }
 
-    public HashMap<Installation, HashMap<Installation, Double>> getDistances() {
-        return distances;
-    }
-
     public double getDistance(Installation fromInstallation, Installation toInstallation) {
         return distances.get(fromInstallation).get(toInstallation);
+    }
+
+    public double getDistanceByIndex(int fromInstallationIndex, int toInstallationIndex) {
+        return getDistance(getInstallationByNumber().get(fromInstallationIndex), getInstallationByNumber().get(toInstallationIndex));
+    }
+
+    public int getInstallationNumberByOrderNumber(int orderNumber) {
+        return getOrdersByNumber().get(orderNumber).getInstallation().getNumber();
     }
 
     public int getHeuristicParameterInt(String parameterName) {

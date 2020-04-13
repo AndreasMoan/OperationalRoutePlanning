@@ -13,9 +13,11 @@ public class ReproductionStandard implements ReproductionProtocol {
 
     private ProblemData problemData;
     private static int NumberOfCrossoverRestarts = 0;
+    private FitnessEvaluationProtocol fitnessEvaluationProtocol;
 
     public ReproductionStandard(ProblemData problemData, FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         this.problemData = problemData;
+        this.fitnessEvaluationProtocol = fitnessEvaluationProtocol;
     }
 
 
@@ -62,10 +64,10 @@ public class ReproductionStandard implements ReproductionProtocol {
         HashMap<Integer, ArrayList<Integer>> father = parents.get(0).getVesselTourChromosome();
         HashMap<Integer, ArrayList<Integer>> mother = parents.get(1).getVesselTourChromosome();
 
-        System.out.println(father);
-        System.out.println(mother);
-
         HashMap<Integer, ArrayList<Integer>> kid = new HashMap<Integer, ArrayList<Integer>>();
+        for (int i = 0; i < problemData.getNumberOfVessels(); i++) {
+            kid.put(i, new ArrayList<>());
+        }
 
         // STEP 1: inherit from father
 
@@ -81,8 +83,6 @@ public class ReproductionStandard implements ReproductionProtocol {
 
             ArrayList<Integer> ordersToCopy = new ArrayList<>();
             ArrayList<Integer> fatherOrders = father.get(vesselNumber);
-
-            System.out.println(fatherOrders);
 
             if (fatherOrders.size() > 0) {
 
@@ -120,7 +120,7 @@ public class ReproductionStandard implements ReproductionProtocol {
 
             for (int orderNumber : mother.get(vesselNumber)) {
                 for (int i = 0; i < mother.size(); i++) {
-                    if (!kid.get(vesselNumber).contains(orderNumber)) {
+                    if (allOrders.contains(orderNumber)) {
                         kid.get(vesselNumber).add(orderNumber);
                         allOrders.remove(orderNumber);
                     }
@@ -131,28 +131,58 @@ public class ReproductionStandard implements ReproductionProtocol {
         //STEP 3:
 
         for (int orderNumber : allOrders) {
-            double leastAddedDistance =  1000.0;
+
+            double leastAddedDistance =  Double.POSITIVE_INFINITY;
             int bestInsertionVessel = 0;
             int bestInsertionPosition = 0;
             for (int vesselNumber = 0; vesselNumber < kid.size(); vesselNumber++) {
-                for (int insertionPosition = 0; insertionPosition < kid.get(vesselNumber).size() + 1; insertionPosition++){
-                    if (insertionPosition == 0 || insertionPosition == kid.get(vesselNumber).size()) {
-                        if (problemData.getDistance(problemData.getInstallationByNumber().get(0), problemData.getOrdersByNumber().get(orderNumber).getInstallation())
-                                + problemData.getDistance(problemData.getOrdersByNumber().get(orderNumber).getInstallation(), problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)))
+
+                for (int insertionPosition = 0; insertionPosition <= kid.get(vesselNumber).size(); insertionPosition++){
+
+                    if (kid.get(vesselNumber).size() == 0) {
+                        if (problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))*2
                                 < leastAddedDistance) {
-                            leastAddedDistance = problemData.getDistance(problemData.getInstallationByNumber().get(0), problemData.getOrdersByNumber().get(orderNumber).getInstallation())
-                                    + problemData.getDistance(problemData.getOrdersByNumber().get(orderNumber).getInstallation(), problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)));
+
+                            leastAddedDistance = problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))*2;
+                            bestInsertionVessel = vesselNumber;
+                            bestInsertionPosition = insertionPosition;
+
+                        }
+                    }
+                    else if (insertionPosition == 0) {
+                        //System.out.println("position: " + insertionPosition + " installation: " + problemData.getOrdersByNumber().get(orderNumber).getInstallation().getNumber() + " installation: " + problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)).getNumber());
+
+                        if (problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(orderNumber), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)))
+                                < leastAddedDistance) {
+
+                            leastAddedDistance = problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                    + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(orderNumber), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)));
+                            bestInsertionVessel = vesselNumber;
+                            bestInsertionPosition = insertionPosition;
+                        }
+                    }
+                    else if (insertionPosition == kid.get(vesselNumber).size()) {
+                        //System.out.println("position: " + insertionPosition + " installation: " + problemData.getOrdersByNumber().get(orderNumber).getInstallation().getNumber() + " installation: " + problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)).getNumber());
+
+                        if (problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(orderNumber), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition-1)))
+                                < leastAddedDistance) {
+
+                            leastAddedDistance = problemData.getDistanceByIndex(0, problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                    + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(orderNumber), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition-1)));
                             bestInsertionVessel = vesselNumber;
                             bestInsertionPosition = insertionPosition;
                         }
                     }
                     else {
-                        if (problemData.getDistance(problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)), problemData.getOrdersByNumber().get(orderNumber).getInstallation())
-                                + problemData.getDistance(problemData.getOrdersByNumber().get(orderNumber).getInstallation(), problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition + 1)))
+
+                        if (problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition -1)), problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)))
                                 < leastAddedDistance) {
 
-                            leastAddedDistance = problemData.getDistance(problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition)), problemData.getOrdersByNumber().get(orderNumber).getInstallation())
-                                    + problemData.getDistance(problemData.getOrdersByNumber().get(orderNumber).getInstallation(), problemData.getInstallationByNumber().get(kid.get(vesselNumber).get(insertionPosition + 1)));
+                            leastAddedDistance = problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition -1)), problemData.getInstallationNumberByOrderNumber(orderNumber))
+                                    + problemData.getDistanceByIndex(problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)), problemData.getInstallationNumberByOrderNumber(kid.get(vesselNumber).get(insertionPosition)));
                             bestInsertionVessel = vesselNumber;
                             bestInsertionPosition = insertionPosition;
                         }
@@ -167,7 +197,7 @@ public class ReproductionStandard implements ReproductionProtocol {
         //Repair
 
         //Insert into subpopulation
-        return new Individual(kid);
+        return new Individual(kid, fitnessEvaluationProtocol);
     }
 
 

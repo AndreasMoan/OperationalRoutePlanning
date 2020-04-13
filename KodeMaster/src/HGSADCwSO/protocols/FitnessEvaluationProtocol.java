@@ -7,6 +7,9 @@ import java.util.ArrayList;
 
 public interface FitnessEvaluationProtocol {
 
+    public void evaluate(Individual individual);
+
+    /*
     public void updateBiasedFitness(ArrayList<Individual> population);
 
     public void addDiversityDistance(Individual individual);
@@ -36,4 +39,6 @@ public interface FitnessEvaluationProtocol {
     public void setNumberOfInstallationsViolationPenalty(double numberOfInstallationsViolationPenalty);
 
     void setPenalizedCostPopulation(ArrayList<Individual> population);
+
+    */
 }

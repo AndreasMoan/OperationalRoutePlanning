@@ -75,7 +75,6 @@ public class HGSADCwSOmain {
             process.recordRunStatistics(iteration, feasiblePopulation, infeasiblePopulation, bestFeasibleIndividual);
             iteration++;
         }
-        System.out.println();
     }
 
     private boolean stoppingCriterion() {
@@ -99,14 +98,19 @@ public class HGSADCwSOmain {
     }
 
     private void diversify(ArrayList<Individual> feasiblePopulation, ArrayList<Individual> infeasiblePopulation) {
+
         System.out.println("Diversifying...");
-        genocide(feasiblePopulation, 2/3);
-        genocide(infeasiblePopulation, 2/3);
+
+        genocide(feasiblePopulation, 2.0/3.0);
+        genocide(infeasiblePopulation, 2.0/3.0);
 
         System.out.println("Breeding new population...");
     }
 
     private void genocide(ArrayList<Individual> population, double proportionToKill){
+
+        System.out.println(population.size());
+
         population.sort(Utilities.getFitnessComparator());
         int numberOfIndividualsToKill = (int) Math.round(population.size()*proportionToKill);
         ArrayList<Individual> individualsToBeKilled = new ArrayList<>(population.subList(0,numberOfIndividualsToKill));
@@ -123,7 +127,7 @@ public class HGSADCwSOmain {
         boolean isImprovingSolution = false;
 
         if (kid.isFeasible()) {
-            if ((bestFeasibleIndividual == null) || (kid.getPenalizedCost() < bestFeasibleIndividual.getPenalizedCost())) {
+            if ((bestFeasibleIndividual == null) || (kid.getFitness() < bestFeasibleIndividual.getFitness())) {
                 bestFeasibleIndividual = kid;
                 isImprovingSolution = true;
             }
@@ -151,9 +155,12 @@ public class HGSADCwSOmain {
     private void checkSubpopulationSize(ArrayList<Individual> subpopulation, ArrayList<Individual> otherSubpopulation) {
         int maxPopulationSize = problemData.getHeuristicParameterInt("Population size")
                 + problemData.getHeuristicParameterInt("Number of offspring in a generation");
+
+        System.out.println(maxPopulationSize);
+
         if (subpopulation.size() + otherSubpopulation.size() >= maxPopulationSize) {
-            genocide(subpopulation, 3/4);
-            genocide(otherSubpopulation, 3/4);
+            genocide(subpopulation, 3.0/4.0);
+            genocide(otherSubpopulation, 3.0/4.0);
         }
     }
 

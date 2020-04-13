@@ -4,6 +4,7 @@ import HGSADCwSO.Individual;
 import HGSADCwSO.Order;
 import HGSADCwSO.ProblemData;
 import HGSADCwSO.Vessel;
+import HGSADCwSO.protocols.FitnessEvaluationProtocol;
 import HGSADCwSO.protocols.InitialPopulationProtocol;
 
 import java.util.*;
@@ -12,22 +13,18 @@ public class InitialPopulationStandard implements InitialPopulationProtocol {
 
     private ProblemData problemData;
     private int numberOfRestarts;
+    private FitnessEvaluationProtocol fitnessEvaluationProtocol;
 
-    public InitialPopulationStandard(ProblemData problemData) {
+    public InitialPopulationStandard(ProblemData problemData, FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         this.problemData = problemData;
+        this.fitnessEvaluationProtocol = fitnessEvaluationProtocol;
         numberOfRestarts = 0;
     }
 
     public Individual createIndividual(){
         HashMap<Integer, Set<Integer>> vesselOrderChromsome = createVesselOrderChromosome();
-
-        System.out.println("VesselOrderChromosome " + vesselOrderChromsome);
-
         HashMap<Integer, ArrayList<Integer>> vesselTourChromosome = createVesselTourChromosome(vesselOrderChromsome);
-
-        System.out.println("VesselTourChromosome " + vesselTourChromosome);
-
-        Individual kid = new Individual(vesselTourChromosome);
+        Individual kid = new Individual(vesselTourChromosome, fitnessEvaluationProtocol);
         return kid;
     }
 
@@ -59,14 +56,8 @@ public class InitialPopulationStandard implements InitialPopulationProtocol {
 
         for (int i = 0; i < problemData.getNumberOfVessels(); i++) {
 
-            System.out.println("---------");
-
             vesselTourChromosome.put(i, new ArrayList<Integer>());
             for (int j : vesselOrderChromosome.get(i)) {
-
-                System.out.println("====");
-
-                System.out.println(i + " " + j);
                 vesselTourChromosome.get(i).add(j);
             }
             if (vesselOrderChromosome.get(i).size() > 0) {
