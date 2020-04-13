@@ -14,17 +14,17 @@ public interface FitnessEvaluationProtocol {
 
     public void addDiversityDistance(Individual individual);
 
-    public void removeDiersityDistance(Individual individual);
+    public void removeDiversityDistance(Individual individual);
 
     public double getHammingDistance(Individual individual1, Individual individual2);
 
-    public void setPenailizedCostIndividual(Individual individual, double durationViolationPenalty, double capacityViolationPenalty, double numberOfOrdersPenalty);
+    public void setPenalizedCostIndividual(Individual individual, double durationViolationPenalty, double capacityViolationPenalty);
 
     public void setPenalizedCostIndividual(Individual individual);
 
-    public double getPenalizedCost(Voyage voyage);
+    public double getPenalizedCost(ArrayList<Integer> orderSequence); //har bytta Voyage voyage med ArrayList<Integer> orderSequence
 
-    public double getPenalizedCost(Voyage voyage,  double durationViolationPenalty, double capacityViolationPenalty, double numberOfOrdersPenalty);
+    public double getPenalizedCost(ArrayList<Integer> orderSequence,  double durationViolationPenalty, double capacityViolationPenalty/*, double numberOfOrdersPenalty*/);//har bytta Voyage voyage med ArrayList<Integer> orderSequence
 
     public double getDurationViolationPenalty();
 

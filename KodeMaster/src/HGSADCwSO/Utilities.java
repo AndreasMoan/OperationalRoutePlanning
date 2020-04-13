@@ -12,6 +12,37 @@ public class Utilities {
         return list.get(randomIndex);
     }
 
+    public static <T> T pickAndRemoveRandomElementFromList(ArrayList<T> list) {
+        T element = pickRandomElementFromList(list);
+        list.remove(element);
+        return element;
+    }
+
+    public static <T> T pickRandomElementFromSet(Set<T> set) {
+        int randomIndex = new Random().nextInt(set.size());
+        int counter = 0;
+        for (T t : set) {
+            if (counter == randomIndex){
+                return t;
+            }
+            counter++;
+        }
+        return null;
+    }
+
+    public static <T> T pickAndRemoveRandomElementFromSet(Set<T> set) {
+        int randomIndex = new Random().nextInt(set.size());
+        int counter = 0;
+        for (T t : set) {
+            if (counter == randomIndex){
+                set.remove(t);
+                return t;
+            }
+            counter++;
+        }
+        return null;
+    }
+
     public static double parseDouble(String commaSeparatedDouble) {
         DecimalFormat df = new DecimalFormat();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -33,19 +64,6 @@ public class Utilities {
         return allElements;
     }
 
-    public static <T> T pickAndRemoveRandomElementFromSet(Set<T> set) {
-        int randomIndex = new Random().nextInt(set.size());
-        int counter = 0;
-        for (T t : set) {
-            if (counter == randomIndex){
-                set.remove(t);
-                return t;
-            }
-            counter++;
-        }
-        return null;
-    }
-
     public static Comparator<Individual> getFitnessComparator() {
         return new Comparator<Individual>() {
             @Override
@@ -62,5 +80,41 @@ public class Utilities {
             }
         };
     }
+
+    public static <K> Comparator <Map.Entry<K, Double>> getMapEntryWithDoubleComparator() {
+        return new Comparator<Map.Entry<K, Double>>() {
+            public int compare(Map.Entry<K, Double> o1, Map.Entry<K, Double> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        };
+    }
+
+    public static <T> Set<Set<T>> cartesianProduct(Set<T> set) { //returns cartesian product of itself, i.e. set x set, excluding those pairs where both elements in a pair are equal
+        HashSet<Set<T>> cartProduct = new HashSet<>();
+        for (T element : set) {
+            for (T element2 : set){
+                if (element != element2){
+                    HashSet<T> pair = new HashSet<T>();
+                    pair.add(element);
+                    pair.add(element2);
+                    cartProduct.add(pair);
+                }
+            }
+        }
+        return cartProduct;
+    }
+
+    public static HashMap<Integer, ArrayList<Integer>> deepCopyVesselTour(HashMap<Integer, ArrayList<Integer>> vesselTour) {
+
+        HashMap<Integer, ArrayList<Integer>> vesselTourCopy = new HashMap<>();
+
+        for (Integer vessel : vesselTour.keySet()){
+            ArrayList<Integer> visitSequence= new ArrayList<Integer>(vesselTour.get(vessel));
+            vesselTourCopy.put(vessel, visitSequence);
+        }
+        return vesselTourCopy;
+    }
+
 }
+
 

@@ -26,7 +26,8 @@ public class HackInitProblemData {
         heuristicInstanceParameters.put("Fitness evaluation protocol","standard");
         heuristicInstanceParameters.put("Population size","25");
         heuristicInstanceParameters.put("Number of offspring in a generation","75");
-        heuristicInstanceParameters.put("Repair rate", "0,5");
+        heuristicInstanceParameters.put("Education rate", "0.75");
+        heuristicInstanceParameters.put("Repair rate", "0.75");
         heuristicInstanceParameters.put("Length of time period", "60");
 
         ArrayList<Vessel> vessels = new ArrayList<Vessel>();
