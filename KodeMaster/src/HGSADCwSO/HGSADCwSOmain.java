@@ -18,6 +18,7 @@ public class HGSADCwSOmain {
     private int iteration;
 
     private double repairChance;
+    private double educationChance;
 
     public static int COST_EDUCATIONS = 0;
     public static int INFEASIBLE_EDUCATIONS = 0;

@@ -23,6 +23,7 @@ public class ProblemData {
                        ArrayList<Installation> installations,
                        ArrayList<Vessel> vessels,
                        HashMap<Installation, HashMap<Installation, Double>> distances,
+                       /*HashMap<Order, HashMap<Order, Double>> distances,*/ //trenger å lage noe som denne
                        ArrayList<Order> orders,
                        ArrayList<Integer> weatherStatesByHour,
                        HashMap<Integer, Double> weatherImpactByState) {
@@ -89,10 +90,6 @@ public class ProblemData {
         return installationByNumber;
     }
 
-    public HashMap<Integer, Vessel> getVesselByNumber() {
-        return vesselByNumber;
-    }
-
     public HashMap<String, String> getHeuristicParameters() {
         return heuristicParameters;
     }
@@ -100,6 +97,13 @@ public class ProblemData {
     public HashMap<Installation, HashMap<Installation, Double>> getDistances() {
         return distances;
     }
+
+    public HashMap<Order, HashMap<Order, Double>> getDistancesBetweenOrders() {
+        return distances;
+    }
+
+    //public HashMap<Integer, Vessel> getVesselByNumber() {return vesselByNumber;}
+    public Vessel getVesselByNumber(Integer vesselNumber){return vesselByNumber.get(vesselNumber);}
 
     public double getDistance(Installation fromInstallation, Installation toInstallation) {
         return distances.get(fromInstallation).get(toInstallation);

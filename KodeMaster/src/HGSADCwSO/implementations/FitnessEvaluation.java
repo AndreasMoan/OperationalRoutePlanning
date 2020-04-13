@@ -19,7 +19,7 @@ public class FitnessEvaluation implements FitnessEvaluationProtocol {
     }
 
     @Override
-    public void removeDiersityDistance(Individual individual) {
+    public void removeDiversityDistance(Individual individual) {
 
     }
 
@@ -29,8 +29,10 @@ public class FitnessEvaluation implements FitnessEvaluationProtocol {
     }
 
     @Override
-    public void setPenailizedCostIndividual(Individual individual, double durationViolationPenalty, double capacityViolationPenalty, double numberOfOrdersPenalty) {
-
+    public void setPenalizedCostIndividual(Individual individual, double durationViolationPenalty, double capacityViolationPenalty) {
+        double penalizedCost = individual.getScheduleCost() + individual.getDurationViolation()*durationViolationPenalty + individual.getCapacityViolation()*capacityViolationPenalty;
+        penalizedCost = Math.round(penalizedCost);
+        individual.setPenalizedCost(penalizedCost);
     }
 
     @Override
@@ -39,12 +41,12 @@ public class FitnessEvaluation implements FitnessEvaluationProtocol {
     }
 
     @Override
-    public double getPenalizedCost(Voyage voyage) {
+    public double getPenalizedCost(ArrayList<Integer> orderSequence) {
         return 0;
     }
 
     @Override
-    public double getPenalizedCost(Voyage voyage, double durationViolationPenalty, double capacityViolationPenalty, double numberOfOrdersPenalty) {
+    public double getPenalizedCost(ArrayList<Integer> orderSequence, double durationViolationPenalty, double capacityViolationPenalty/*, double numberOfOrdersPenalty*/) { //har bytta Voyage voyage med ArrayList<Integer> orderSequence
         return 0;
     }
 

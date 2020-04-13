@@ -23,7 +23,7 @@ public class ReproductionStandard implements ReproductionProtocol {
 
         Set<Integer> allOrders = new HashSet<Integer>();
         for (int i = 0; i < problemData.getOrdersByNumber().size(); i++) {
-            allOrders.add(i);
+            allOrders.add(i); //lager denne én mer enn
         }
 
         // STEP 0: Inheritance rule
