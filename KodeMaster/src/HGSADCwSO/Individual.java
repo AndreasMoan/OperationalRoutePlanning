@@ -2,6 +2,7 @@ package HGSADCwSO;
 
 import HGSADCwSO.protocols.FitnessEvaluationProtocol;
 
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,9 +10,9 @@ import java.util.Set;
 
 public class Individual {
 
-    private int fitness;
     private double penalizedCost, scheduleCost, durationViolation, capacityViolation;
     private Set<Integer> departingVessels; //TODO må initialiseres.
+    private double fitness;
 
     private boolean feasibility;
 
@@ -19,8 +20,9 @@ public class Individual {
 
     private HashMap<Integer, ArrayList<Integer>> vesselTourChromosome;
 
-    public Individual(HashMap<Integer, ArrayList<Integer>>  vesselTourChromosome) {
+    public Individual(HashMap<Integer, ArrayList<Integer>>  vesselTourChromosome, FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         this.vesselTourChromosome = vesselTourChromosome;
+        fitnessEvaluationProtocol.evaluate(this);
     }
 
     public Set<Integer> getDepartingVessels() {return departingVessels;}
@@ -32,9 +34,12 @@ public class Individual {
     public void setVesselTourChromosome(HashMap<Integer, ArrayList<Integer>> vesselTour){
         this.vesselTourChromosome = vesselTour;
     }
-
-    public int getFitness() {
+    public double getFitness() {
         return fitness;
+    }
+
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
     }
 
     public boolean isFeasible(){
@@ -43,9 +48,14 @@ public class Individual {
 
     public double getPenalizedCost() { return penalizedCost; }
 
+    public double getPenalizedCost() {
+        return penalizedCost;
+    }
+
     public void setPenalizedCost(Double cost) {
         penalizedCost = cost;
     }
+
 
     public void updatePenalizedCostForChromosome(FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         fitnessEvaluationProtocol.setPenalizedCostIndividual(this);

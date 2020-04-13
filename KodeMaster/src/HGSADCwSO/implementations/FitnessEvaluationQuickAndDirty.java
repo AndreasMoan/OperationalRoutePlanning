@@ -1,25 +1,24 @@
 package HGSADCwSO.implementations;
 
 import HGSADCwSO.*;
+import HGSADCwSO.protocols.FitnessEvaluationProtocol;
 import HGSADCwSO.protocols.SailingLegCalculationsProtocol;
 
 import java.util.ArrayList;
 
-public class FitnessEvaluationQuickAndDirty {
+public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol {
 
     private Individual individual;
     private ProblemData problemData;
     private SailingLegCalculationsProtocol sailingLegCalculationsProtocol;
     private double value;
 
-    public FitnessEvaluationQuickAndDirty(Individual individual, ProblemData problemData){
-        this.individual = individual;
+    public FitnessEvaluationQuickAndDirty(ProblemData problemData){
         this.problemData = problemData;
-        this.value = evaluate();
         selectProtocols();
     }
 
-    public double evaluate() {
+    public void evaluate(Individual individual) {
         int nVessels = problemData.getNumberOfVessels();
         double cost = 0;
         for (int i = 0; i < nVessels; i++){
@@ -27,7 +26,9 @@ public class FitnessEvaluationQuickAndDirty {
             Vessel vessel = problemData.getVesselByNumber().get(i);
             cost += evaluateRoute(route, vessel);
         }
-        return cost;
+
+        System.out.println(cost);
+        individual.setFitness(cost);
     }
 
     public double evaluateRoute(ArrayList<Integer> route, Vessel vessel) {

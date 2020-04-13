@@ -83,5 +83,6 @@ public class FitnessEvaluation implements FitnessEvaluationProtocol {
     @Override
     public void setPenalizedCostPopulation(ArrayList<Individual> population) {
 
+    public void evaluate(Individual individual) {
     }
 }
