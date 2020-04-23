@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol {
 
-    private Individual individual;
     private ProblemData problemData;
     private SailingLegCalculationsProtocol sailingLegCalculationsProtocol;
     private double value;
@@ -18,18 +17,18 @@ public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol
         selectProtocols();
     }
 
-    public void evaluate(Individual individual) {
+    public double evaluate(Genotype genotype) {
         int nVessels = problemData.getNumberOfVessels();
         double cost = 0;
         for (int i = 0; i < nVessels; i++){
-            ArrayList<Integer> route = individual.getVesselTourChromosome().get(i);
+            ArrayList<Integer> route = genotype.getVesselTourChromosome().get(i);
             Vessel vessel = problemData.getVesselByNumber().get(i);
             cost += evaluateRoute(route, vessel);
         }
 
-        System.out.println(cost);
-        individual.setFitness(cost);
+        return cost;
     }
+
 
     public double evaluateRoute(ArrayList<Integer> route, Vessel vessel) {
 
@@ -89,4 +88,81 @@ public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol
     public double getValue() {
         return value;
     }
+
+    @Override
+    public void updateBiasedFitness(ArrayList<Individual> population) {
+
+    }
+
+    @Override
+    public void addDiversityDistance(Individual individual) {
+
+    }
+
+    @Override
+    public void removeDiversityDistance(Individual individual) {
+
+    }
+
+    @Override
+    public double getHammingDistance(Individual individual1, Individual individual2) {
+        return 0;
+    }
+
+    @Override
+    public void setPenalizedCostIndividual(Individual individual, double durationViolationPenalty, double capacityViolationPenalty) {
+
+    }
+
+    @Override
+    public void setPenalizedCostIndividual(Individual individual) {
+
+    }
+
+    @Override
+    public double getPenalizedCost(ArrayList<Integer> orderSequence) {
+        return 0;
+    }
+
+    @Override
+    public double getPenalizedCost(ArrayList<Integer> orderSequence, double durationViolationPenalty, double capacityViolationPenalty) {
+        return 0;
+    }
+
+    @Override
+    public double getDurationViolationPenalty() {
+        return 0;
+    }
+
+    @Override
+    public double getCapacityViolationPenalty() {
+        return 0;
+    }
+
+    @Override
+    public double getNumberOfInstallationsPenalty() {
+        return 0;
+    }
+
+    @Override
+    public void setDurationViolationPenalty(double durationViolationPenalty) {
+
+    }
+
+    @Override
+    public void setCapacityViolationPenalty(double capacityViolationPenalty) {
+
+    }
+
+    @Override
+    public void setNumberOfInstallationsViolationPenalty(double numberOfInstallationsViolationPenalty) {
+
+    }
+
+    @Override
+    public void setPenalizedCostPopulation(ArrayList<Individual> population) {
+
+    }
+
+
 }

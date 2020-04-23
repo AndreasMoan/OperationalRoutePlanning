@@ -1,5 +1,6 @@
 package HGSADCwSO.protocols;
 
+import HGSADCwSO.Genotype;
 import HGSADCwSO.Individual;
 import HGSADCwSO.Voyage;
 
@@ -7,9 +8,9 @@ import java.util.ArrayList;
 
 public interface FitnessEvaluationProtocol {
 
-    public void evaluate(Individual individual);
+    public double evaluate(Genotype genotype);
 
-    /*
+
     public void updateBiasedFitness(ArrayList<Individual> population);
 
     public void addDiversityDistance(Individual individual);
@@ -24,7 +25,7 @@ public interface FitnessEvaluationProtocol {
 
     public double getPenalizedCost(ArrayList<Integer> orderSequence); //har bytta Voyage voyage med ArrayList<Integer> orderSequence
 
-    public double getPenalizedCost(ArrayList<Integer> orderSequence,  double durationViolationPenalty, double capacityViolationPenalty/*, double numberOfOrdersPenalty*/);//har bytta Voyage voyage med ArrayList<Integer> orderSequence
+    public double getPenalizedCost(ArrayList<Integer> orderSequence,  double durationViolationPenalty, double capacityViolationPenalty);//har bytta Voyage voyage med ArrayList<Integer> orderSequence
 
     public double getDurationViolationPenalty();
 
@@ -40,5 +41,4 @@ public interface FitnessEvaluationProtocol {
 
     void setPenalizedCostPopulation(ArrayList<Individual> population);
 
-    */
 }
