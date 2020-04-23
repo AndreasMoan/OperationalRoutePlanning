@@ -1,5 +1,7 @@
 package HGSADCwSO;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,10 +12,14 @@ public class HackInitProblemData {
 
         HashMap<String, String> problemInstanceParameters = new HashMap<String, String>();
 
-        problemInstanceParameters.put("","");
-        problemInstanceParameters.put("","");
-        problemInstanceParameters.put("","");
-        problemInstanceParameters.put("","");
+        problemInstanceParameters.put("fuel price","10,0");
+        problemInstanceParameters.put("Servicing consumption","0,4");
+        problemInstanceParameters.put("Idling consumption","0,25");
+        problemInstanceParameters.put("Max speed","14,0");
+        problemInstanceParameters.put("Min speed","7,0");
+        problemInstanceParameters.put("Impact on sailing from weather state 2","2,0");
+        problemInstanceParameters.put("Impact on sailing from weather state 3","3,0");
+        problemInstanceParameters.put("Time per hiv","0,1");
         problemInstanceParameters.put("","");
         problemInstanceParameters.put("","");
 
@@ -23,17 +29,25 @@ public class HackInitProblemData {
         heuristicInstanceParameters.put("Parents selection protocol","binary tournament");
         heuristicInstanceParameters.put("Education protocol","cost");
         heuristicInstanceParameters.put("Reproduction protocol","standard");
-        heuristicInstanceParameters.put("Fitness evaluation protocol","standard");
+        heuristicInstanceParameters.put("Fitness evaluation protocol","dag");
         heuristicInstanceParameters.put("Population size","25");
         heuristicInstanceParameters.put("Number of offspring in a generation","75");
         heuristicInstanceParameters.put("Education rate", "0.75");
         heuristicInstanceParameters.put("Repair rate", "0.75");
-        heuristicInstanceParameters.put("Length of time period", "60");
+        heuristicInstanceParameters.put("Number of time periods per hour", "10");
+        heuristicInstanceParameters.put("Sailing leg calculations protocol","quick and dirty");
+        heuristicInstanceParameters.put("Cost penalty per excessive time period","10");
+        heuristicInstanceParameters.put("","");
+        heuristicInstanceParameters.put("","");
+        heuristicInstanceParameters.put("","");
+        heuristicInstanceParameters.put("","");
+
+
 
         ArrayList<Vessel> vessels = new ArrayList<Vessel>();
 
-        vessels.add(new Vessel("PSV1", 100, 7, 14, 0, 0));
-        vessels.add(new Vessel("PSV2", 100, 7, 14, 0, 1));
+        vessels.add(new Vessel("PSV1", 100, 7, 14, 0, 0, 3));
+        vessels.add(new Vessel("PSV2", 100, 7, 14, 0, 1, 2));
 
         ArrayList<Installation> installations = new ArrayList<Installation>();
 
@@ -68,7 +82,6 @@ public class HackInitProblemData {
 
         ArrayList<Order> orders = new ArrayList<Order>();
 
-        orders.add(new Order(30,0, installations.get(1),0));
         orders.add(new Order(30,0, installations.get(4),1));
         orders.add(new Order(30,0, installations.get(16),2));
         orders.add(new Order(30,0, installations.get(11),3));
@@ -77,6 +90,7 @@ public class HackInitProblemData {
         orders.add(new Order(30,0, installations.get(21),6));
         orders.add(new Order(30,0, installations.get(26),7));
         orders.add(new Order(40,0, installations.get(9), 8));
+        orders.add(new Order(30,0, installations.get(1), 9));
 
         HashMap<Installation, HashMap<Installation, Double>> distances = new HashMap<Installation, HashMap<Installation, Double>>();
 
@@ -122,9 +136,10 @@ public class HackInitProblemData {
         ArrayList<Integer> weatherStatesByHour = new ArrayList<Integer>(Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2));
 
         HashMap<Integer, Double> weatherImpactByState = new HashMap<Integer, Double>();
-        weatherImpactByState.put(0,0.0);
-        weatherImpactByState.put(1,0.2);
-        weatherImpactByState.put(2,0.3);
+        weatherImpactByState.put(0, 1.0);
+        weatherImpactByState.put(1, 1.2);
+        weatherImpactByState.put(2, 1.3);
+        weatherImpactByState.put(3, 2.0);
 
         return new ProblemData(problemInstanceParameters, heuristicInstanceParameters, installations, vessels,distances, orders, weatherStatesByHour, weatherImpactByState);
 

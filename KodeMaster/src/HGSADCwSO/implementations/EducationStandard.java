@@ -16,6 +16,7 @@ public class EducationStandard implements EducationProtocol {
     protected boolean isRepair;
     protected int penaltyMultiplier;
 
+
     public EducationStandard(ProblemData problemData, FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         this.problemData = problemData;
         this.fitnessEvaluationProtocol = fitnessEvaluationProtocol;
@@ -23,6 +24,17 @@ public class EducationStandard implements EducationProtocol {
         this.penaltyMultiplier = 1;
     }
 
+    @Override
+    public void educate(Individual individual) {
+
+    }
+
+    @Override
+    public void repairEducate(Individual individual, int penaltyMultiplyer) {
+
+    }
+}
+/*
     @Override
     public void educate(Individual individual) {
         Random rand = new Random();
@@ -123,7 +135,7 @@ public class EducationStandard implements EducationProtocol {
         ArrayList<Integer> neighbours = new ArrayList<Integer>(orders); //create set of neighbours
         neighbours.remove(order); //remove this order from the set
         //get the distance from all other installations (orders) to this installation (order) as (key,value)-pairs
-        ArrayList<Map.Entry<Order, Double>> distances = new ArrayList<Map.Entry<Order, Double>>(problemData.getDistances().get(problemData.getOrdersByNumber(order)).entrySet());  //TODO Hvordan fikse distances i problemdata til å bli riktig format?
+        ArrayList<Map.Entry<Order, Double>> distances = new ArrayList<Map.Entry<Order, Double>>(problemData.getDistances().get(problemData.getOrdersByNumber().get(order)).entrySet());  //TODO Hvordan fikse distances i problemdata til å bli riktig format?
         //remove (key,value)-pairs that are not neighbours
         ArrayList<Map.Entry<Order, Double>> removeList = new ArrayList<Map.Entry<Order, Double>>();
         for (Map.Entry<Order, Double> distance : distances) { //removing the order considered from the distances-ArrayList
@@ -149,7 +161,7 @@ public class EducationStandard implements EducationProtocol {
         if best merge has reduced cost
         Choose and perform best merge
         end-if
-        */
+
         //TODO - Et individ består av ett kromosom med ordresekvens pr båt?
         Set<Integer> departingVessels = individual.getDepartingVessels();
 
@@ -211,5 +223,4 @@ public class EducationStandard implements EducationProtocol {
         }
     }
 
-
-}
+    */

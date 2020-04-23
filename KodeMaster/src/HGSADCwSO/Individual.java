@@ -11,29 +11,34 @@ import java.util.Set;
 public class Individual {
 
     private double penalizedCost, scheduleCost, durationViolation, capacityViolation;
-    private Set<Integer> departingVessels; //TODO må initialiseres.
+    private Set<Integer> departingVessels;
     private double fitness;
 
     private boolean feasibility;
 
-    //private HashMap<Integer, Set<Integer>> vesselOrderChromosome;
-
-    private HashMap<Integer, ArrayList<Integer>> vesselTourChromosome;
+    private Genotype genotype;
+    private FitnessEvaluationProtocol fitnessEvaluationProtocol;
 
     public Individual(HashMap<Integer, ArrayList<Integer>>  vesselTourChromosome, FitnessEvaluationProtocol fitnessEvaluationProtocol) {
-        this.vesselTourChromosome = vesselTourChromosome;
-        fitnessEvaluationProtocol.evaluate(this);
+        this.genotype = new Genotype(vesselTourChromosome);
+        this.fitnessEvaluationProtocol = fitnessEvaluationProtocol;
+
+        System.out.println(fitnessEvaluationProtocol);
+        this.fitness = fitnessEvaluationProtocol.evaluate(genotype);
+        this.departingVessels = genotype.getVesselTourChromosome().keySet();
     }
 
     public Set<Integer> getDepartingVessels() {return departingVessels;}
 
     public HashMap<Integer, ArrayList<Integer>> getVesselTourChromosome() {
-        return vesselTourChromosome;
+        return genotype.getVesselTourChromosome();
     }
 
     public void setVesselTourChromosome(HashMap<Integer, ArrayList<Integer>> vesselTour){
-        this.vesselTourChromosome = vesselTour;
+        this.genotype.setVesselTourChromosome(vesselTour);
+        this.fitness = fitnessEvaluationProtocol.evaluate(genotype);
     }
+
     public double getFitness() {
         return fitness;
     }
@@ -46,8 +51,6 @@ public class Individual {
         return feasibility;
     }
 
-    public double getPenalizedCost() { return penalizedCost; }
-
     public double getPenalizedCost() {
         return penalizedCost;
     }
@@ -56,14 +59,15 @@ public class Individual {
         penalizedCost = cost;
     }
 
-
+    /*
     public void updatePenalizedCostForChromosome(FitnessEvaluationProtocol fitnessEvaluationProtocol) {
         fitnessEvaluationProtocol.setPenalizedCostIndividual(this);
     }
+    */
 
     public double getScheduleCost() {return scheduleCost; }
 
-    public void setScheduleCost(double cost) {this.scheduleCost = cost;}
+    public void setScheduleCost() {this.scheduleCost = fitnessEvaluationProtocol.evaluate(genotype);}
 
     public double getDurationViolation() {return durationViolation; }
 
