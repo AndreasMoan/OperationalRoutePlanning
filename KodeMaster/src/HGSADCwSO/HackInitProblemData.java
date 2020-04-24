@@ -34,7 +34,7 @@ public class HackInitProblemData {
         heuristicInstanceParameters.put("Number of offspring in a generation","75");
         heuristicInstanceParameters.put("Education rate", "0.75");
         heuristicInstanceParameters.put("Repair rate", "0.75");
-        heuristicInstanceParameters.put("Number of time periods per hour", "10");
+        heuristicInstanceParameters.put("Number of time periods per hour", "6");
         heuristicInstanceParameters.put("Sailing leg calculations protocol","quick and dirty");
         heuristicInstanceParameters.put("Cost penalty per excessive time period","10");
         heuristicInstanceParameters.put("","");

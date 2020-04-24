@@ -24,7 +24,6 @@ public class Individual {
         this.fitnessEvaluationProtocol = fitnessEvaluationProtocol;
 
         System.out.println(fitnessEvaluationProtocol);
-        this.fitness = fitnessEvaluationProtocol.evaluate(genotype);
         this.departingVessels = genotype.getVesselTourChromosome().keySet();
     }
 
@@ -36,11 +35,18 @@ public class Individual {
 
     public void setVesselTourChromosome(HashMap<Integer, ArrayList<Integer>> vesselTour){
         this.genotype.setVesselTourChromosome(vesselTour);
-        this.fitness = fitnessEvaluationProtocol.evaluate(genotype);
+    }
+
+    public Genotype getGenotype() {
+        return genotype;
     }
 
     public double getFitness() {
         return fitness;
+    }
+
+    public void setFeasibility(boolean feasibility) {
+        this.feasibility = feasibility;
     }
 
     public void setFitness(double fitness) {
@@ -67,7 +73,7 @@ public class Individual {
 
     public double getScheduleCost() {return scheduleCost; }
 
-    public void setScheduleCost() {this.scheduleCost = fitnessEvaluationProtocol.evaluate(genotype);}
+    //public void setScheduleCost() {this.scheduleCost = fitnessEvaluationProtocol.evaluate(this);}
 
     public double getDurationViolation() {return durationViolation; }
 

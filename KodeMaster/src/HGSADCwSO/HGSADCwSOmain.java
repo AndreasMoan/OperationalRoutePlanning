@@ -131,6 +131,8 @@ public class HGSADCwSOmain {
 
     public boolean addToSubpopulation(Individual kid) {
         boolean isImprovingSolution = false;
+        process.evaluate(kid);
+        System.out.println(kid.getGenotype().getVesselTourChromosome());
 
         if (kid.isFeasible()) {
             if ((bestFeasibleIndividual == null) || (kid.getFitness() < bestFeasibleIndividual.getFitness())) {

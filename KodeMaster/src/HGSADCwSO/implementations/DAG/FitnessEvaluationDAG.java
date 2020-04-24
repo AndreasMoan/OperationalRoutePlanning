@@ -5,6 +5,7 @@ import HGSADCwSO.protocols.FitnessEvaluationProtocol;
 
 import java.util.ArrayList;
 
+
 public class FitnessEvaluationDAG implements FitnessEvaluationProtocol {
 
     private ProblemData problemData;
@@ -14,8 +15,11 @@ public class FitnessEvaluationDAG implements FitnessEvaluationProtocol {
     }
 
 
-    public double evaluate(Genotype genotype){
+    public void evaluate(Individual individual) {
 
+        Genotype genotype = individual.getGenotype();
+
+        boolean feasibility = true;
         double fitness = 0;
 
         int multiplier = (int) problemData.getHeuristicParameterDouble("Number of time periods per hour");
@@ -23,12 +27,16 @@ public class FitnessEvaluationDAG implements FitnessEvaluationProtocol {
         for (Vessel vessel : problemData.getVessels()){
             DAG graph = new DAG(genotype.getVesselTourChromosome().get(vessel.getNumber()), vessel.getReturnDay()*24*multiplier, this.problemData);
             fitness += graph.getShortestFeasiblePathCost();
+            feasibility = graph.getFeasibility() && feasibility;
+
         }
 
         System.out.println("Fitness this iteration is equal to:          " + fitness);
 
-        return fitness;
+        individual.setFitness(fitness);
+        individual.setFeasibility(feasibility);
     }
+
 
     @Override
     public void updateBiasedFitness(ArrayList<Individual> population) {
