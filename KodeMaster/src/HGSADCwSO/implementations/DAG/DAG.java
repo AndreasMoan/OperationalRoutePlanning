@@ -11,6 +11,7 @@ public class DAG {
 
     private double shortestPathCost;
     private double shortestFeasiblePathCost;
+    private boolean feasibility;
 
     private ArrayList<Integer> voyage;
     private ArrayList<Integer> voyageWithDepot;
@@ -66,6 +67,7 @@ public class DAG {
             buildGraph();
             doDijkstra();
             setCost();
+            setFeasibility();
         }
     }
 
@@ -134,6 +136,11 @@ public class DAG {
             double servicingCost = serviceInfo[0];
             double finIdlingTime = serviceInfo[1];
 
+            if (!isArrivalPossible(realStartTime, distance, finIdlingTime)) {
+                finServicingTime++;
+                continue;
+            }
+
             double[] idlingNeededInfo = isIdlingNeeded(realStartTime, distance, finIdlingTime);
 
             continue_ = (!(idlingNeededInfo[0] >= 0));
@@ -146,11 +153,6 @@ public class DAG {
             double[] timeInAllWeatherStates = getTimeInAllWS(realStartTime, convertNodeTimeToRealTime(finServicingTime));
 
             double adjustedAverageSpeed = calculateAdjustedAverageSpeed(timeInAllWeatherStates, distance);
-
-            if (adjustedAverageSpeed > maxSpeed) {
-                finServicingTime++;
-                continue;
-            }
 
             double sailingCost = sailingCalculations(timeInAllWeatherStates, adjustedAverageSpeed);
 
@@ -245,38 +247,28 @@ public class DAG {
         return new double[] {consumption, realTime};
     }
 
-    private double[] isIdlingNeeded(double startTime, double distance, double finIdlingTime) {
+    private boolean isArrivalPossible(double startTime, double distance, double finIdlingRealTime) {
 
-        double time = startTime;
-
-        double[] tiws = getTimeInAllWS(startTime,finIdlingTime);
+        double[] tiws = getTimeInAllWS(startTime,finIdlingRealTime);
 
         double maxDistance = tiws[0]*maxSpeed + tiws[1]*maxSpeedWS2 + tiws[2]*maxSpeedWS3;
 
         if (maxDistance >= distance) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private double[] isIdlingNeeded(double startTime, double distance, double finIdlingRealTime) {
+
+        double longestSailingTime = distance/minSpeed;
+
+        if (longestSailingTime >= finIdlingRealTime - startTime) {
             return new double[] {-1.0 , 0};
         }
-        else {
-
-
-            // System.out.println("Idling Needed, md: " + maxDistance + ", distance: " + distance + ", start time: " + startTime + ", end time: " + finIdlingTime);
-
-            double distanceLeft = distance;
-
-            double speed = problemData.getWeatherStateByHour().get((int) floor(time)) == 3 ? maxSpeedWS3 : problemData.getWeatherStateByHour().get((int) floor(time)) == 2 ? maxSpeedWS2 : maxSpeed;
-            double timeFrac = min(1.0, min(1-time%1, distanceLeft/speed));
-
-            while (!(distanceLeft <= 0)) {
-                distanceLeft -= speed * timeFrac;
-                time += timeFrac;
-                if (distanceLeft <= 0) {
-                    return new double[] {1.0 , finIdlingTime - time};
-                }
-                speed = problemData.getWeatherStateByHour().get((int) floor(time)) == 3 ? maxSpeedWS3 : problemData.getWeatherStateByHour().get((int) floor(time)) == 2 ? maxSpeedWS2 : maxSpeed;
-                timeFrac = min(1.0, distanceLeft/speed);
-            }
-        }
-        return new double[] {0 , 0};
+        return new double[] {1, finIdlingRealTime - longestSailingTime - startTime};
     }
 
     private double[] idlingCalculations(double idlingTime, double finIdlingTime) {
@@ -377,9 +369,9 @@ public class DAG {
         for (Edge childEdge : node.getChildEdges()){
             // System.out.println("3 !!!!");
             if (childEdge.getChildNode().getBestCost() > node.getBestCost() + childEdge.getCost()) {
-                // System.out.println("Parent node cost: " + node.getBestCost() + ", Edge cost: " + childEdge.getCost() + ", Child node cost: " + childEdge.getChildNode().getBestCost());
                 childEdge.getChildNode().setBestCost(node.getBestCost() + childEdge.getCost());
                 childEdge.getChildNode().setBestParentEdge(childEdge);
+                // System.out.println("Parent node cost: " + node.getBestCost() + ", Edge cost: " + childEdge.getCost() + ", Child node cost: " + childEdge.getChildNode().getBestCost());
             }
         }
     }
@@ -429,11 +421,24 @@ public class DAG {
         shortestFeasiblePathCost = leastFeasibleCost;
     }
 
+    //--------------------------------------- SET FEASIBILITY ----------------------------------------
+
+    public void setFeasibility() {
+        this.feasibility = shortestFeasiblePathCost < Double.POSITIVE_INFINITY;
+    }
+
+
+    //--------------------------------------- GET  ----------------------------------------
+
     public double getShortestPathCost(){
         return shortestPathCost;
     }
 
     public double getShortestFeasiblePathCost() {
         return shortestFeasiblePathCost;
+    }
+
+    public boolean getFeasibility() {
+        return feasibility;
     }
 }

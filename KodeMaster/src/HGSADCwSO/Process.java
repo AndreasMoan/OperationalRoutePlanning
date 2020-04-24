@@ -59,6 +59,10 @@ public class Process {
         }
     }
 
+    public void evaluate(Individual individual) {
+        fitnessEvaluationProtocol.evaluate(individual);
+    }
+
     public void repair(Individual individual) {
         double probability = problemData.getHeuristicParameterDouble("Repair rate");
         repair(individual, probability);

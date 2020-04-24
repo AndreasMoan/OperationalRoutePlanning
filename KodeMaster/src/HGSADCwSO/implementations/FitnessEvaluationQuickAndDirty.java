@@ -17,7 +17,8 @@ public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol
         selectProtocols();
     }
 
-    public double evaluate(Genotype genotype) {
+    public void evaluate(Individual individual) {
+        Genotype genotype = individual.getGenotype();
         int nVessels = problemData.getNumberOfVessels();
         double cost = 0;
         for (int i = 0; i < nVessels; i++){
@@ -26,7 +27,8 @@ public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol
             cost += evaluateRoute(route, vessel);
         }
 
-        return cost;
+        individual.setFitness(cost);
+        individual.setFeasibility(true);
     }
 
 
@@ -88,6 +90,7 @@ public class FitnessEvaluationQuickAndDirty implements FitnessEvaluationProtocol
     public double getValue() {
         return value;
     }
+
 
     @Override
     public void updateBiasedFitness(ArrayList<Individual> population) {

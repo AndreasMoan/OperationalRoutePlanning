@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface FitnessEvaluationProtocol {
 
-    public double evaluate(Genotype genotype);
+    public void evaluate(Individual individual);
 
 
     public void updateBiasedFitness(ArrayList<Individual> population);
