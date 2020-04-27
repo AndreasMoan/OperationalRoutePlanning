@@ -1,7 +1,10 @@
 package HGSADCwSO;
 
-import HGSADCwSO.implementations.*;
-import HGSADCwSO.implementations.DAG.FitnessEvaluationDAG;
+import HGSADCwSO.implementations.EducationStandard;
+import HGSADCwSO.implementations.FitnessEvaluation;
+import HGSADCwSO.implementations.InitialPopulationStandard;
+import HGSADCwSO.implementations.ParentsSelectionBinaryTournament;
+import HGSADCwSO.implementations.ReproductionStandard;
 import HGSADCwSO.protocols.EducationProtocol;
 import HGSADCwSO.protocols.FitnessEvaluationProtocol;
 import HGSADCwSO.protocols.InitialPopulationProtocol;
@@ -112,10 +115,7 @@ public class Process {
     private void selectFitnessEvaluationProtocol() {
         switch (problemData.getHeuristicParameters().get("Fitness evaluation protocol")) {
             case "standard":
-                fitnessEvaluationProtocol = new FitnessEvaluationQuickAndDirty(problemData);
-                break;
-            case "dag":
-                fitnessEvaluationProtocol = new FitnessEvaluationDAG(problemData);
+                fitnessEvaluationProtocol = new FitnessEvaluation();
                 break;
             default:
                 fitnessEvaluationProtocol = null;
@@ -150,7 +150,7 @@ public class Process {
         infeasibleSubPopulationByIteration.put(iteration, infeasiblePopulation);
         bestFeasibleIndividualByIteration.put(iteration, bestFeasibleIndividual);
 
-        // System.out.println("Iteration: " + iteration + " Feasible pop size: " + feasiblePopulation.size() + " Infeasible pop size: " + infeasiblePopulation.size());
+        System.out.println("Iteration: " + iteration + " Feasible pop size: " + feasiblePopulation.size() + " Infeasible pop size: " + infeasiblePopulation.size());
     }
 
     public void addDiversityDistance(Individual kid) {
