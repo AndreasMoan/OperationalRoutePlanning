@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Node {
 
-    private int time;
+    private double time;
     private int orderNumber;
     private ArrayList<Edge> parentEdges;
     private ArrayList<Edge> childEdges;
@@ -14,12 +14,11 @@ public class Node {
 
     private boolean feasibility;
 
-    public Node(int time, int orderNumber){
+    public Node(double time, int orderNumber){
         this.time = time;
         this.orderNumber = orderNumber;
         this.childEdges = new ArrayList<Edge>();
         this.parentEdges = new ArrayList<Edge>();
-        this.setBestCost(Double.POSITIVE_INFINITY);
     }
 
     public void setFeasibility(boolean feasibility) {
@@ -46,7 +45,7 @@ public class Node {
         return childEdges;
     }
 
-    public int getTime() {
+    public double getTime() {
         return time;
     }
 
