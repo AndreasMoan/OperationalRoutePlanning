@@ -1,7 +1,10 @@
 package HGSADCwSO;
 
-import java.util.ArrayList;
+import com.sun.org.apache.xpath.internal.operations.Or;
+
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ProblemData {
@@ -39,11 +42,9 @@ public class ProblemData {
         setInstallationsByNumber();
         setVesselsByNumber();
         setOrdersByNumber();
-        setDistancesBetweenOrderNumbersByDay();
     }
 
     public void setDistancesBetweenOrderNumbersByDay() {
-        distancesBetweenOrderNumbersByDay = new HashMap<>();
         distancesBetweenOrderNumbersByDay.put(0, new HashMap<Integer, HashMap<Integer, Double>>());
         for (Order order1 : orders){
             distancesBetweenOrderNumbersByDay.get(0).put(order1.getNumber(), new HashMap<Integer, Double>());
@@ -112,12 +113,11 @@ public class ProblemData {
         return distances;
     }
 
-    /*public HashMap<Order, HashMap<Order, Double>> getDistancesBetweenOrders() {
-        return distances;
-    }*/
+    public double getDistanceBetweenTwoOrders(Order order1, Order order2) {
+        return getDistance(order1.getInstallation(), order2.getInstallation());
+    }
 
-    //public HashMap<Integer, Vessel> getVesselByNumber() {return vesselByNumber;}
-    public Vessel getVesselByNumber(Integer vesselNumber){return vesselByNumber.get(vesselNumber);}
+    public HashMap<Integer, Vessel> getVesselByNumber() {return vesselByNumber;}
 
     public double getDistance(Installation fromInstallation, Installation toInstallation) {
         return distances.get(fromInstallation).get(toInstallation);
@@ -128,7 +128,21 @@ public class ProblemData {
     }
 
     public int getInstallationNumberByOrderNumber(int orderNumber) {
-        return getOrdersByNumber().get(orderNumber).getInstallation().getNumber();
+        if (orderNumber == 0) {
+            return installationByNumber.get(0).getNumber();
+        }
+        else {
+            return getOrdersByNumber().get(orderNumber).getInstallation().getNumber();
+        }
+    }
+
+    public int getDemandByOrderNumber(int orderNumber) {
+        if (orderNumber == 0) {
+            return 0;
+        }
+        else {
+            return getOrdersByNumber().get(orderNumber).getDemand();
+        }
     }
 
     public int getHeuristicParameterInt(String parameterName) {
@@ -176,9 +190,5 @@ public class ProblemData {
 
     public Double getWeatherImpactByHour(int hour) {
         return getWeatherImpactByState().get(getWeatherStateByHour().get(hour));
-    }
-
-    public HashMap<Integer, HashMap<Integer, HashMap<Integer, Double>>> getDistancesBetweenOrderNumbersByDay() {
-        return distancesBetweenOrderNumbersByDay;
     }
 }
