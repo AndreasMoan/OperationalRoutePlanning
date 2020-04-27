@@ -8,12 +8,12 @@ public class Order {
     private Installation installation;
     private int deadline;
 
-    public Order(int demand, int day, Installation installation, int number, int deadline) {
+    public Order(int demand, int day, Installation installation, int number) {
         this.demand = demand;
         this.day = day;
         this.installation = installation;
         this.number = number;
-        this.deadline = Integer.MAX_VALUE; //TODO - denne må vi gå over
+        this.deadline = Integer.MAX_VALUE;
     }
 
     public Installation getInstallation() {
@@ -32,5 +32,7 @@ public class Order {
         return number;
     }
 
-    public int getDeadline() { return deadline; }
+    public int getDeadline() {
+        return deadline;
+    }
 }
